@@ -1,0 +1,324 @@
+/* Reset */
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+body { background: #f5f7fa; color: #333; }
+
+/* Header */
+header { background: #004aad; color: white; display: flex; align-items: center; padding: 10px 20px; }
+header img { height: 40px; margin-right: 15px; }
+nav { margin-left: auto; }
+nav button { background: white; border: none; margin: 0 5px; padding: 8px 15px; border-radius: 6px; cursor: pointer; transition: 0.2s; }
+nav button:hover { background: #dbe8ff; }
+
+/* Forms */
+form.form { display: flex; gap: 10px; margin: 15px 0; flex-wrap: wrap; }
+form.form input, form.form select { padding: 6px; border: 1px solid #ccc; border-radius: 4px; }
+form.form button { background: #004aad; color: white; border: none; border-radius: 6px; padding: 6px 12px; cursor: pointer; }
+form.form button:hover { background: #003080; }
+
+/* Tables */
+.styled-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+.styled-table th, .styled-table td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+.styled-table th { background: #004aad; color: white; }
+.styled-table tr:nth-child(even) { background: #f9f9f9; }
+
+/* Buttons actions */
+button.edit-cat, button.delete-cat, button.edit-prod, button.delete-prod { background: none; border: none; cursor: pointer; font-size: 18px; margin: 0 3px; }
+button.edit-cat:hover, button.edit-prod:hover { color: #004aad; }
+button.delete-cat:hover, button.delete-prod:hover { color: red; }
+
+/* Modals */
+.modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; }
+.modal-content { background: white; padding: 20px; border-radius: 8px; min-width: 300px; max-width: 500px; }
+.modal-content h3 { margin-bottom: 15px; }
+.modal-content form { display: flex; flex-direction: column; gap: 10px; }
+.modal-content input, .modal-content select { padding: 6px; border: 1px solid #ccc; border-radius: 4px; }
+.modal-content button { background: #004aad; color: white; border: none; border-radius: 6px; padding: 8px; cursor: pointer; }
+.modal-content button:hover { background: #003080; }
+.modal-close { background: red !important; }
+
+/* === HOME === */
+#products-buttons { ... }
+.product-btn { ... }
+#cart { ... }
+#cart h3 { ... }
+#cart-list { ... }
+#cart-list li { ... }
+
+/* === HOME 2 COLONNE === */
+#home-content {
+  display: flex;
+  gap: 20px;
+}
+
+#products-column {
+  flex: 7;
+}
+
+#cart-column {
+  flex: 3;
+}
+
+/* Assicurati che i bottoni siano fluidi */
+#products-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.product-btn {
+  flex: 1 0 160px;
+  min-height: 80px;
+  font-size: 18px;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  padding: 15px;
+  cursor: pointer;
+  color: white;
+  text-shadow:
+    -1px -1px 0 #000,  
+     1px -1px 0 #000,
+    -1px  1px 0 #000,
+     1px  1px 0 #000;
+}
+/* Effetti hover e click sui bottoni prodotti */
+.product-btn {
+  transition: transform 0.2s, box-shadow 0.2s; /* transizione fluida */
+  cursor: pointer;
+}
+
+.product-btn:hover {
+  transform: scale(1.1); /* ingrandimento 10% */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3); /* ombra evidente */
+  filter: brightness(1.1); /* leggero aumento luminosità */
+}
+
+.product-btn:active {
+  transform: scale(0.95); /* rimbalzo al click */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2); /* ombra ridotta */
+}
+
+#cart-column #cart {
+  position: sticky;
+  top: 20px;
+  max-height: 80vh;
+  overflow-y: auto;
+  margin-right: 20px;   /* aggiunge spazio a destra */
+}
+
+#print-order {
+  margin-top: 10px;
+  width: 100%;
+  background: #0066ff;       /* blu vivo */
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+  transition: transform 0.2s, filter 0.2s, box-shadow 0.2s;
+}
+
+#print-order:active {
+  transform: scale(0.97);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+#cart-total { ... }
+
+.page {
+  padding-left: 5px;
+}
+
+/* --- RESPONSIVE --- */
+
+/* Schermi piccoli (max 768px, es. tablet verticali e smartphone) */
+@media (max-width: 768px) {
+  body {
+    font-size: 14px;
+    padding: 5px;
+  }
+
+  header h1 {
+    font-size: 20px;
+    text-align: center;
+  }
+
+  .product-btn {
+    font-size: 16px;
+    padding: 12px;
+    width: 45%;         /* due bottoni per riga */
+    margin: 5px 2%;
+  }
+
+  #cart {
+    width: 100%;        /* carrello a tutta larghezza */
+    margin-top: 15px;
+    padding: 10px;
+  }
+
+  #cart-total strong {
+    font-size: 16px;
+  }
+
+  button {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  #home-content {
+    flex-direction: column;   /* carrello sotto i bottoni */
+  }
+
+  #cart-column {
+    flex: 1 1 100%;
+    max-width: 100%;
+    margin-top: 15px;
+  }
+
+  .product-btn {
+    width: 100%;       /* bottoni uno sotto l’altro */
+    font-size: 15px;
+  }
+
+  header h1 {
+    font-size: 18px;
+  }
+
+  #cart {
+    font-size: 14px;
+  }
+}
+
+/* Wrapper dell'app */
+#app {
+  display: none;           /* nascosto di default, appare dopo login */
+  min-height: 100vh;       /* occupa tutta l'altezza */
+  display: flex;
+  flex-direction: column;  /* header sopra, sezioni sotto */
+}
+
+/* Box login */
+#login-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 300px;
+  margin: 100px auto;      /* centrato verticalmente */
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Header e navigazione */
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  background-color: #004aad;
+  color: white;
+}
+
+header nav button {
+  margin-left: 10px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+header nav button:hover {
+  opacity: 0.9;
+}
+
+.login-info {
+  font-size: 14px;
+  color: #555;
+  background: #fff8e1;
+  border: 1px solid #f0c36d;
+  border-radius: 6px;
+  padding: 8px;
+  margin-bottom: 10px;
+}
+
+/* === STORICO MIGLIORATO === */
+
+#history-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.preset-btn {
+  background: #004aad;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 7px 14px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+.preset-btn:hover { background: #003080; }
+
+#history-summary {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 16px 0;
+}
+
+.summary-card {
+  flex: 1;
+  min-width: 130px;
+  background: white;
+  border: 2px solid #004aad;
+  border-radius: 10px;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.summary-label {
+  font-size: 13px;
+  color: #666;
+  text-align: center;
+}
+
+.summary-value {
+  font-size: 20px;
+  font-weight: bold;
+  color: #004aad;
+  text-align: center;
+}
+
+#history-export-btns {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+#history-export-btns button {
+  background: #004aad;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+#history-export-btns button:hover { background: #003080; }
