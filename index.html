@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <title>San Luigi - Gestione Ordini</title>
   <link rel="stylesheet" href="style.css">
+  <!-- Netlify Identity -->
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   <!-- jsPDF e jsPDF-AutoTable e repo xslx -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
@@ -22,7 +24,7 @@
 <body>
   
 
-<div id="login-box" style="display:none;">
+<div id="login-box" style="display:block;">
   <h2>Login</h2>
   <p class="login-info">⚠️ Accesso riservato al personale autorizzato.</p>
   <button id="login-btn">🔐 Accedi</button>
@@ -30,7 +32,7 @@
 </div>
 
   <!---WRAPPER APP---->
-  <div id="app" style="display:block;">
+  <div id="app" style="display:none;">
 
     <header>
     <img src="https://raw.githubusercontent.com/giovannigrimoldi93-glitch/bar-sl-files/refs/heads/main/Logo-parrocchia-2.svg" alt="Logo Bar">
