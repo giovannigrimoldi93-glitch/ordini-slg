@@ -1,5 +1,14 @@
 // ---------------- PIN LOGIN ----------------
-const CORRECT_PIN = "1234"; // cambia questo PIN come preferisci
+let currentPin = "1234"; // verrà sovrascritto dal DB in initPin()
+
+async function initPin() {
+  try {
+    const data = await fetch("/api/config").then(r => r.json());
+    currentPin = data.pin || "1234";
+  } catch {
+    currentPin = "1234";
+  }
+}
 
 function checkAuth() {
   if (sessionStorage.getItem("slg_auth") === "ok") {
@@ -23,7 +32,7 @@ document.getElementById("pin-input").addEventListener("keydown", (e) => {
 
 function verifyPin() {
   const pin = document.getElementById("pin-input").value;
-  if (pin === CORRECT_PIN) {
+  if (pin === currentPin) {
     sessionStorage.setItem("slg_auth", "ok");
     showApp();
   } else {
@@ -40,6 +49,47 @@ document.getElementById("logout-btn").addEventListener("click", () => {
   document.getElementById("login-box").style.display = "block";
   document.getElementById("pin-input").value = "";
   document.getElementById("pin-error").textContent = "";
+});
+
+// Cambio PIN dalle impostazioni
+document.getElementById("pin-change-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const current = document.getElementById("pin-current").value;
+  const newPin  = document.getElementById("pin-new").value;
+  const confirm = document.getElementById("pin-confirm").value;
+  const msg     = document.getElementById("pin-change-msg");
+
+  if (current !== currentPin) {
+    msg.style.color = "red";
+    msg.textContent = "❌ PIN attuale errato.";
+    return;
+  }
+  if (newPin.length < 4) {
+    msg.style.color = "red";
+    msg.textContent = "❌ Il nuovo PIN deve essere di almeno 4 caratteri.";
+    return;
+  }
+  if (newPin !== confirm) {
+    msg.style.color = "red";
+    msg.textContent = "❌ I PIN non coincidono.";
+    return;
+  }
+
+  try {
+    await fetch("/api/config", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ pin: newPin })
+    });
+    currentPin = newPin;
+    msg.style.color = "green";
+    msg.textContent = "✅ PIN aggiornato con successo!";
+    e.target.reset();
+    setTimeout(() => { msg.textContent = ""; }, 3000);
+  } catch {
+    msg.style.color = "red";
+    msg.textContent = "❌ Errore nel salvataggio del PIN.";
+  }
 });
 
 // ---------------- API HELPERS ----------------
@@ -525,4 +575,4 @@ document.querySelectorAll(".modal").forEach(m => {
 });
 
 // ---------------- AVVIO ----------------
-checkAuth();
+initPin().then(() => checkAuth());
