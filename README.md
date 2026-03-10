@@ -95,6 +95,23 @@ Applicazione web per la gestione ordini del bar **San Luigi**, ottimizzata per u
 
 ---
 
+## 🔑 Recupero PIN dimenticato
+
+Il PIN è salvato nel database Neon — non nel codice. Se lo dimentichi:
+
+**Visualizzare il PIN attuale** — vai su [neon.tech](https://neon.tech) → il tuo progetto → **SQL Editor** e lancia:
+```sql
+SELECT value FROM config WHERE key = 'pin';
+```
+
+**Resettare al PIN di default `1234`** — sempre da SQL Editor:
+```sql
+UPDATE config SET value = '1234' WHERE key = 'pin';
+```
+Poi cambialo subito da Impostazioni.
+
+---
+
 ## 👨‍💻 Manutenzione
 
 - Aggiungere nuovi prodotti/categorie da **Impostazioni**.
