@@ -19,16 +19,31 @@ export default async function handler(req) {
 
   try {
     if (req.method === "GET") {
-      const rows = await sql`SELECT key, value FROM config WHERE key = 'bar_name'`;
-      return cors({ name: rows[0]?.value || "San Luigi" });
+      const rows = await sql`SELECT key, value FROM config WHERE key IN ('bar_name', 'pin')`;
+      const data = Object.fromEntries(rows.map(r => [r.key, r.value]));
+      return cors({
+        name: data.bar_name || "San Luigi",
+        pin:  data.pin      || "1234"
+      });
     }
 
     if (req.method === "POST") {
-      const { name } = await req.json();
-      await sql`
-        INSERT INTO config (key, value) VALUES ('bar_name', ${name})
-        ON CONFLICT (key) DO UPDATE SET value = ${name}
-      `;
+      const body = await req.json();
+
+      if (body.name !== undefined) {
+        await sql`
+          INSERT INTO config (key, value) VALUES ('bar_name', ${body.name})
+          ON CONFLICT (key) DO UPDATE SET value = ${body.name}
+        `;
+      }
+
+      if (body.pin !== undefined) {
+        await sql`
+          INSERT INTO config (key, value) VALUES ('pin', ${body.pin})
+          ON CONFLICT (key) DO UPDATE SET value = ${body.pin}
+        `;
+      }
+
       return cors({ ok: true });
     }
 
