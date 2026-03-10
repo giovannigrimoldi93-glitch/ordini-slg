@@ -1,97 +1,3 @@
-// ---------------- PIN LOGIN ----------------
-let currentPin = "1234"; // verrà sovrascritto dal DB in initPin()
-
-async function initPin() {
-  try {
-    const data = await fetch("/api/config").then(r => r.json());
-    currentPin = data.pin || "1234";
-  } catch {
-    currentPin = "1234";
-  }
-}
-
-function checkAuth() {
-  if (sessionStorage.getItem("slg_auth") === "ok") {
-    showApp();
-  } else {
-    document.getElementById("login-box").style.display = "block";
-    document.getElementById("app").style.display = "none";
-  }
-}
-
-function showApp() {
-  document.getElementById("login-box").style.display = "none";
-  document.getElementById("app").style.display = "block";
-  initApp();
-}
-
-document.getElementById("pin-btn").addEventListener("click", verifyPin);
-document.getElementById("pin-input").addEventListener("keydown", (e) => {
-  if (e.key === "Enter") verifyPin();
-});
-
-function verifyPin() {
-  const pin = document.getElementById("pin-input").value;
-  if (pin === currentPin) {
-    sessionStorage.setItem("slg_auth", "ok");
-    showApp();
-  } else {
-    document.getElementById("pin-error").textContent = "PIN errato, riprova.";
-    document.getElementById("pin-input").value = "";
-    document.getElementById("pin-input").focus();
-  }
-}
-
-document.getElementById("logout-btn").addEventListener("click", () => {
-  sessionStorage.removeItem("slg_auth");
-  if (pollInterval) clearInterval(pollInterval);
-  document.getElementById("app").style.display = "none";
-  document.getElementById("login-box").style.display = "block";
-  document.getElementById("pin-input").value = "";
-  document.getElementById("pin-error").textContent = "";
-});
-
-// Cambio PIN dalle impostazioni
-document.getElementById("pin-change-form").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const current = document.getElementById("pin-current").value;
-  const newPin  = document.getElementById("pin-new").value;
-  const confirm = document.getElementById("pin-confirm").value;
-  const msg     = document.getElementById("pin-change-msg");
-
-  if (current !== currentPin) {
-    msg.style.color = "red";
-    msg.textContent = "❌ PIN attuale errato.";
-    return;
-  }
-  if (newPin.length < 4) {
-    msg.style.color = "red";
-    msg.textContent = "❌ Il nuovo PIN deve essere di almeno 4 caratteri.";
-    return;
-  }
-  if (newPin !== confirm) {
-    msg.style.color = "red";
-    msg.textContent = "❌ I PIN non coincidono.";
-    return;
-  }
-
-  try {
-    await fetch("/api/config", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ pin: newPin })
-    });
-    currentPin = newPin;
-    msg.style.color = "green";
-    msg.textContent = "✅ PIN aggiornato con successo!";
-    e.target.reset();
-    setTimeout(() => { msg.textContent = ""; }, 3000);
-  } catch {
-    msg.style.color = "red";
-    msg.textContent = "❌ Errore nel salvataggio del PIN.";
-  }
-});
-
 // ---------------- API HELPERS ----------------
 async function apiFetch(path, options = {}) {
   const res = await fetch(path, {
@@ -572,6 +478,92 @@ exportBtnXSLX.addEventListener("click", () => {
 // ---------------- MODALI ----------------
 document.querySelectorAll(".modal").forEach(m => {
   m.addEventListener("click", e => { if (e.target.classList.contains("modal")) m.style.display = "none"; });
+});
+
+// ---------------- PIN LOGIN ----------------
+let currentPin = "1234";
+
+async function initPin() {
+  try {
+    const data = await fetch("/api/config").then(r => r.json());
+    currentPin = data.pin || "1234";
+  } catch {
+    currentPin = "1234";
+  }
+}
+
+function checkAuth() {
+  if (sessionStorage.getItem("slg_auth") === "ok") {
+    showApp();
+  } else {
+    document.getElementById("login-box").style.display = "block";
+    document.getElementById("app").style.display = "none";
+  }
+}
+
+function showApp() {
+  document.getElementById("login-box").style.display = "none";
+  document.getElementById("app").style.display = "block";
+  initApp();
+}
+
+function verifyPin() {
+  const pin = document.getElementById("pin-input").value;
+  if (pin === currentPin) {
+    sessionStorage.setItem("slg_auth", "ok");
+    showApp();
+  } else {
+    document.getElementById("pin-error").textContent = "PIN errato, riprova.";
+    document.getElementById("pin-input").value = "";
+    document.getElementById("pin-input").focus();
+  }
+}
+
+document.getElementById("pin-btn").addEventListener("click", verifyPin);
+document.getElementById("pin-input").addEventListener("keydown", (e) => {
+  if (e.key === "Enter") verifyPin();
+});
+
+document.getElementById("logout-btn").addEventListener("click", () => {
+  sessionStorage.removeItem("slg_auth");
+  if (pollInterval) clearInterval(pollInterval);
+  document.getElementById("app").style.display = "none";
+  document.getElementById("login-box").style.display = "block";
+  document.getElementById("pin-input").value = "";
+  document.getElementById("pin-error").textContent = "";
+});
+
+document.getElementById("pin-change-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const current = document.getElementById("pin-current").value;
+  const newPin  = document.getElementById("pin-new").value;
+  const confirm = document.getElementById("pin-confirm").value;
+  const msg     = document.getElementById("pin-change-msg");
+
+  if (current !== currentPin) {
+    msg.style.color = "red"; msg.textContent = "❌ PIN attuale errato."; return;
+  }
+  if (newPin.length < 4) {
+    msg.style.color = "red"; msg.textContent = "❌ Il nuovo PIN deve essere di almeno 4 caratteri."; return;
+  }
+  if (newPin !== confirm) {
+    msg.style.color = "red"; msg.textContent = "❌ I PIN non coincidono."; return;
+  }
+  try {
+    await fetch("/api/config", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ pin: newPin })
+    });
+    currentPin = newPin;
+    msg.style.color = "green";
+    msg.textContent = "✅ PIN aggiornato con successo!";
+    e.target.reset();
+    setTimeout(() => { msg.textContent = ""; }, 3000);
+  } catch {
+    msg.style.color = "red";
+    msg.textContent = "❌ Errore nel salvataggio del PIN.";
+  }
 });
 
 // ---------------- AVVIO ----------------
