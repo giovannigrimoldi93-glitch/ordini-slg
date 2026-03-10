@@ -71,7 +71,6 @@ Applicazione web per la gestione ordini del bar **San Luigi**, ottimizzata per u
 
 - L'app è pensata per **uso interno** durante eventi.
 - Il PIN protegge l'accesso — cambiarlo rispetto al default prima dell'evento.
-- Il PIN viene salvato in `sessionStorage` (si azzera chiudendo il browser).
 - Le credenziali del database sono gestite come variabili d'ambiente su Netlify — non visibili nel codice sorgente.
 
 ---
