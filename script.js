@@ -1,42 +1,46 @@
-// ---------------- NETLIFY IDENTITY ----------------
-const netlifyIdentity = window.netlifyIdentity;
-netlifyIdentity.init({ APIUrl: "https://festasanluigi.netlify.app/.netlify/identity" });
+// ---------------- PIN LOGIN ----------------
+const CORRECT_PIN = "1234"; // cambia questo PIN come preferisci
 
-netlifyIdentity.on("init", user => {
-  if (user) {
+function checkAuth() {
+  if (sessionStorage.getItem("slg_auth") === "ok") {
     showApp();
   } else {
-    const hash = window.location.hash;
-    if (hash && (hash.includes("confirmation_token") || hash.includes("invite_token") || hash.includes("recovery_token"))) {
-      netlifyIdentity.open();
-    }
+    document.getElementById("login-box").style.display = "block";
+    document.getElementById("app").style.display = "none";
   }
-});
-
-netlifyIdentity.on("login", () => {
-  window.location.hash = "";
-  netlifyIdentity.close();
-  showApp();
-});
-
-netlifyIdentity.on("logout", () => {
-  if (pollInterval) clearInterval(pollInterval);
-  document.getElementById("app").style.display = "none";
-  document.getElementById("login-box").style.display = "block";
-});
-
-document.getElementById("login-btn").addEventListener("click", () => {
-  netlifyIdentity.open("login");
-});
-
-const logoutBtn = document.getElementById("logout-btn");
-if (logoutBtn) logoutBtn.addEventListener("click", () => netlifyIdentity.logout());
+}
 
 function showApp() {
   document.getElementById("login-box").style.display = "none";
   document.getElementById("app").style.display = "block";
   initApp();
 }
+
+document.getElementById("pin-btn").addEventListener("click", verifyPin);
+document.getElementById("pin-input").addEventListener("keydown", (e) => {
+  if (e.key === "Enter") verifyPin();
+});
+
+function verifyPin() {
+  const pin = document.getElementById("pin-input").value;
+  if (pin === CORRECT_PIN) {
+    sessionStorage.setItem("slg_auth", "ok");
+    showApp();
+  } else {
+    document.getElementById("pin-error").textContent = "PIN errato, riprova.";
+    document.getElementById("pin-input").value = "";
+    document.getElementById("pin-input").focus();
+  }
+}
+
+document.getElementById("logout-btn").addEventListener("click", () => {
+  sessionStorage.removeItem("slg_auth");
+  if (pollInterval) clearInterval(pollInterval);
+  document.getElementById("app").style.display = "none";
+  document.getElementById("login-box").style.display = "block";
+  document.getElementById("pin-input").value = "";
+  document.getElementById("pin-error").textContent = "";
+});
 
 // ---------------- API HELPERS ----------------
 async function apiFetch(path, options = {}) {
@@ -519,3 +523,6 @@ exportBtnXSLX.addEventListener("click", () => {
 document.querySelectorAll(".modal").forEach(m => {
   m.addEventListener("click", e => { if (e.target.classList.contains("modal")) m.style.display = "none"; });
 });
+
+// ---------------- AVVIO ----------------
+checkAuth();
