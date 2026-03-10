@@ -20,29 +20,7 @@ const api = {
   put:    (path, body) => apiFetch(path, { method: "PUT",    body: JSON.stringify(body) }),
   delete: (path)       => apiFetch(path, { method: "DELETE" })
 };
-async function apiFetch(path, options = {}) {
-  const token = await getToken();
-  const res = await fetch(path, {
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      ...(options.headers || {})
-    }
-  });
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({ error: res.statusText }));
-    throw new Error(err.error || "Errore API");
-  }
-  return res.json();
-}
 
-const api = {
-  get:    (path)       => apiFetch(path),
-  post:   (path, body) => apiFetch(path, { method: "POST",   body: JSON.stringify(body) }),
-  put:    (path, body) => apiFetch(path, { method: "PUT",    body: JSON.stringify(body) }),
-  delete: (path)       => apiFetch(path, { method: "DELETE" })
-};
 
 // ---------------- NAV ----------------
 window.showPage = function(page) {
